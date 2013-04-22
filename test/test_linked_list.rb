@@ -202,11 +202,11 @@ class LinkedListItemTest < Test::Unit::TestCase
     assert_equal result, ll.to_s
   end
 
-  def test_31_insert_item_to_bad_location 
+  def test_31_insert_item_to_bad_location
     ll = LinkedList.new("foo", "bar", "grille")
     assert_raise IndexError do
       ll.insert(4, "zulu")
-    end    
+    end
   end
 
   def test_32_unshift_inserts_at_the_beginning
@@ -232,7 +232,7 @@ class LinkedListItemTest < Test::Unit::TestCase
     ll = LinkedList.new("foo", "bar", "grille")
     ll.shift
     result = '| bar, grille |'
-    assert_equal (result, ll.to_s)
+    assert_equal(result, ll.to_s)
   end
 
 
@@ -259,7 +259,7 @@ class LinkedListItemTest < Test::Unit::TestCase
     ll = LinkedList.new("foo", "bar", "grille")
     ll.pop
     result = '| foo, bar |'
-    assert_equal (result, ll.to_s)
+    assert_equal(result, ll.to_s)
   end
 
 end
