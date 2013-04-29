@@ -3,7 +3,7 @@ require 'linked_list_item'
 class LinkedList
   attr_reader :first_item
 
-  def initialize *args
+  def initialize (*args)
   #What the * does is put all args after that point into an array.
     @size = 0
     @first_item = nil
@@ -11,7 +11,7 @@ class LinkedList
     args.each { |payload| add_item payload } # unless args.nil?
   end
 
-  def add_item payload
+  def add_item (payload)
     new_item = LinkedListItem.new payload
     if first_item.nil?
       @first_item = new_item
@@ -22,7 +22,7 @@ class LinkedList
     @size += 1
   end
 
-  def query n #returns the whole object
+  def query (n) #returns the whole object
     raise IndexError, "Bad index query" if n > @size
     # i = 0
     # iLoc = @first_item
@@ -39,7 +39,7 @@ class LinkedList
     current_item
   end
 
-  def get n
+  def get (n)
     query(n).payload
   end
 
@@ -56,7 +56,7 @@ class LinkedList
     innards = " "
     current_item = @first_item
     while current_item  # -or- self.size.times do
-      innards += current_item.payload
+      innards += current_item.payload.to_s
       unless current_item.last?
         innards += ","
       end
@@ -68,15 +68,15 @@ class LinkedList
 
   # ========= Bonus ========== #
 
-  def [] n
+  def [] (n)
     get n
   end
 
-  def []= n, new_payload
+  def []= (n, new_payload)
     query(n).payload = new_payload
   end
 
-  def remove n
+  def remove (n)
     raise IndexError, "Cant remove, does not exist" if n+1 > @size
     if n == 0
       @first_item = query 1
@@ -90,7 +90,7 @@ class LinkedList
 
   # ========= Things to play with ========== #
 
-  def insert n, payload
+  def insert (n, payload)
     raise IndexError, "cant add item there" if n > @size
     @size += 1
     new_item = LinkedListItem.new payload
@@ -108,7 +108,7 @@ class LinkedList
     end
   end
 
-  def unshift *args #add to the beginning
+  def unshift (*args) #add to the beginning
     i = 0
     args.each { |x| insert i, "#{x}"
       i +=1 }
@@ -120,7 +120,7 @@ class LinkedList
       item.payload
   end
 
-  def push *args #adds to the end
+  def push (*args) #adds to the end
     args.each { |x| add_item "#{x}" }
   end
 
@@ -129,5 +129,64 @@ class LinkedList
     remove @size-1
     item.payload
   end
+
+  # ========= Index exercise ========== #
+
+  def indexOf(search_term)
+    return nil if @size == 0
+    item = @first_item
+    i = 0
+    until search_term == item.payload
+      i += 1 #this should be at the bottom, but it only works here
+      return nil if (i == @size) && (search_term != item.payload)
+      item = item.next_list_item
+    end
+    i
+  end
+
+  # ========= Sorting exercise ========== #
+
+  def sorted?
+    in_order = true
+    if @size > 1
+      #start a loopin and a checking
+      i = 0
+      a = @first_item
+      b = @first_item.next_list_item
+      until i == @size-1 #(base 0 check)
+        if a > b
+          in_order = false
+        end
+      a = b
+      b = b.next_list_item
+      i += 1
+      end
+    end
+  in_order
+  end
+
+  def sort
+    if !sorted?
+      x = 1
+      while x < @size # do it until you get to the end
+        if (get(x-1) <= get(x)) #Compare payloads, if in order
+          x += 1 # move that x thing up
+        else
+          hold = get(x-1) #hold onto object
+          remove(x-1) #remove item
+          insert(x, hold) # put it back in
+          if (x > 1)
+            x -= 1 # now take a step back
+          end
+        end #end if else dance
+      end #end loop
+    end
+    self
+  end
+
+
+
+
+
 
 end
